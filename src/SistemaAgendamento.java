@@ -32,7 +32,7 @@ public class SistemaAgendamento {
                 System.out.print("\n     Digite o nome do PACIENTE: ");
                 String nomePaciente = scanner.nextLine();
                 scanner.nextLine();
-                System.out.print("     Digite o CPF do paciente: ");
+                System.out.print("     Digite o CPF do PACIENTE: ");
                 String telefonePaciente = scanner.nextLine();
                 Paciente paciente = new Paciente(nomePaciente, telefonePaciente);
                 System.out.println("\n     >>>>PACIENTE CADASTRADO COM SUCESSO<<<<");
