@@ -53,8 +53,8 @@ public class Medico extends Pessoa{
         return "Médico{" +
                 "Nome: " + nome + '\n' +
                 "CPF: " + cpf + '\n' +
-                "CRM/AL: " + crm + '\n' +
-                "Salário: R$ " + salario + '\n' +
+                "CRM: " + crm + '\n' +
+                "Salário: " + salario + '\n' +
                 "Especialidade: " + especialidade + '\n';
                 }
     }
