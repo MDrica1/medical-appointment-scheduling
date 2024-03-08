@@ -25,9 +25,10 @@ public class SistemaAgendamento {
             int opcao = scanner.nextInt();
 
 
-            switch (opcao) {
+
 
                 //########## PARTE DO CADASTRO DO PACIENTE ##########
+            switch (opcao) {
                 case 1:
                 System.out.print("\n     Digite o nome do PACIENTE: ");
                 String nomePaciente = scanner.nextLine();
