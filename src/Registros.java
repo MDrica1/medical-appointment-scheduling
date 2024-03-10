@@ -1,7 +1,6 @@
 public interface Registros {
 
-    public void consultar();
 
 
-
+//    public void consultar();
 }

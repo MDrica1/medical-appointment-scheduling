@@ -15,7 +15,7 @@ abstract class Pessoa implements Registros {
     public String getCpf() {
         return cpf;
     }
-
+    public void consultar(){}
 }
 
 

@@ -29,10 +29,10 @@ public class Consulta implements Registros{
         return especialidade;
     }
 
-    @Override
-    public void consultar() {
+    //@Override
+    //public void consultar() {
         //Fazer método CONSULTAR atendimentos agendados
-    }
+    //}
 
     @Override
     public String toString() {
@@ -43,4 +43,7 @@ public class Consulta implements Registros{
                 ", Especialidade= " + especialidade +
                 '}';
     }
+
+    //@Override
+    //public void consultar() {}
 }

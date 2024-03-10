@@ -2,12 +2,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Medico extends Pessoa{
-    private  String crm;
-    private double salario;
-    private String especialidade;
+    private final String crm;
+    private final double salario;
+    private final String especialidade;
 
-    public static List<Medico> cadastrados = new ArrayList<>();
+
     public static List<? extends Registros> Atendimentos = new ArrayList<>();
+    public static List<Medico> cadastrados = new ArrayList<>();
+    public static ArrayList<String> especialidades = new ArrayList<>();
 
     public Medico(String nome, String cpf, String crm, double salario, String especialidade) {
         super(nome, cpf);
@@ -41,20 +43,22 @@ public class Medico extends Pessoa{
         return especialidade;
     }
 
-    @Override
-    public void consultar() {
+
         //Fazer método consultar médicos cadastrados
         // Ter opções 1. Todas as especialidades
         //            2. Filtrar por especialidades
-    }
+
+
 
     @Override
     public String toString() {
         return "Médico{" +
                 "Nome: " + nome + '\n' +
                 "CPF: " + cpf + '\n' +
-                "CRM/AL: " + crm + '\n' +
-                "Salário: R$ " + salario + '\n' +
+                "CRM: " + crm + '\n' +
+                "Salário: " + salario + '\n' +
                 "Especialidade: " + especialidade + '\n';
                 }
+
+
     }

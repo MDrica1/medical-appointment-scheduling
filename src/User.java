@@ -1,15 +1,16 @@
 //import java.text.DecimalFormat;
 //mport java.util.Scanner;
 
-public class User{
+public class User extends Pessoa{
     private static int proximoCodigo = 1;
-    private final String nome;
+    //private final String nome;
     private final String senha;
+    //private final String cpf;
     private final String codigo;
 
     // Construtor
-    public User(String nome, String senha) {
-        this.nome = nome;
+    public User(String nome, String cpf, String senha) {
+        super(nome, cpf);
         this.senha = senha;
         this.codigo = "2024"+proximoCodigo;
         proximoCodigo++;
@@ -40,7 +41,15 @@ public class User{
         return senha;
     }
 
+    @Override
     public String getNome() {
-        return nome;
+        return super.getNome();
     }
+
+    @Override
+    public void consultar() {
+
+    }
+
+
 }

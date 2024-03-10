@@ -1,5 +1,6 @@
 //import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Formattable;
 import java.util.List;
 import java.util.Scanner;
 
@@ -8,7 +9,7 @@ public class SistemaAgendamento {
     private static final List<User> usuarios = new ArrayList<>(); //guardar usuários cadastrados
     private static String logado = null; //testar login
 
-    //########## MÉTODO AGENDAR CONSULTA  ##########
+        //########## MÉTODO AGENDAR CONSULTA  ##########
     /*
      É preciso fazer um método que:
 
@@ -29,8 +30,9 @@ public class SistemaAgendamento {
 
         Scanner novoUsuario = new Scanner(System.in);
         System.out.printf("\n%s------ CADASTRAMENTO DE USUÁRIO ------%s\n%n", Cores.YELLOW_BOLD_BRIGHT,Cores.RESET);
-        System.out.printf("%sNome:%s ", Cores.YELLOW_BOLD_BRIGHT,Cores.RESET);
+        System.out.printf("     %sNome:%s ", Cores.YELLOW_BOLD_BRIGHT,Cores.RESET);
         String nome = novoUsuario.nextLine();
+        String ncpf = validaDocNum("CPF",usuarios);
 
         String senha;
         boolean senhaValida = false;
@@ -44,7 +46,7 @@ public class SistemaAgendamento {
             3. Conter, ao menos, um %snúmero%s;
             4. Conter, ao menos, um dos %scaracteres especiais%s: %s!@#$&*%s
             
-            %sCrie sua senha:%s\s""", Cores.YELLOW_BOLD_BRIGHT, Cores.RESET,Cores.YELLOW_BOLD_BRIGHT, Cores.RESET,Cores.YELLOW_BOLD_BRIGHT, Cores.RESET,Cores.YELLOW_BOLD_BRIGHT, Cores.RESET,Cores.YELLOW_BOLD_BRIGHT, Cores.RESET,Cores.YELLOW_BOLD_BRIGHT, Cores.RESET,Cores.YELLOW_BOLD_BRIGHT, Cores.RESET,Cores.YELLOW_BOLD_BRIGHT, Cores.RESET);
+            %s      Crie sua senha:%s\s""", Cores.YELLOW_BOLD_BRIGHT, Cores.RESET,Cores.YELLOW_BOLD_BRIGHT, Cores.RESET,Cores.YELLOW_BOLD_BRIGHT, Cores.RESET,Cores.YELLOW_BOLD_BRIGHT, Cores.RESET,Cores.YELLOW_BOLD_BRIGHT, Cores.RESET,Cores.YELLOW_BOLD_BRIGHT, Cores.RESET,Cores.YELLOW_BOLD_BRIGHT, Cores.RESET,Cores.YELLOW_BOLD_BRIGHT, Cores.RESET);
 
             /*Console console = System.console();
             if (console == null) {
@@ -63,11 +65,11 @@ public class SistemaAgendamento {
                 continue;
             }
 
-            User u1 = new User(nome, senha);
+            User u1 = new User(nome, ncpf, senha);
             usuarios.add(u1);
             System.out.printf("%sUsuário cadastrado com sucesso!%s%n", Cores.GREEN_BOLD_BRIGHT,Cores.RESET);
-            System.out.println("%s\nSeu código de acesso ao sistema é: %s".formatted(Cores.YELLOW_BOLD_BRIGHT,Cores.RESET) + Cores.GREEN_BOLD_BRIGHT + u1.getCodigo()+Cores.RESET +
-                    Cores.YELLOW_BOLD_BRIGHT+"\nUse-o para fazer login"+Cores.RESET);
+            System.out.println("%s\nSeu login no sistema é: %s".formatted(Cores.YELLOW_BOLD_BRIGHT,Cores.RESET) + Cores.GREEN_BOLD_BRIGHT + u1.getCodigo()+Cores.RESET
+                    /*Cores.YELLOW_BOLD_BRIGHT+"\nUse-o para fazer login"+Cores.RESET*/);
 
         }
     }
@@ -80,9 +82,9 @@ public class SistemaAgendamento {
         //boolean encontrado = false;
 
         System.out.printf("\n%s------ LOGIN ------%s\n%n", Cores.YELLOW_BOLD_BRIGHT,Cores.RESET);
-        System.out.printf("%sCódigo:%s ", Cores.YELLOW_BOLD_BRIGHT,Cores.RESET);
+        System.out.printf("     %sLogin:%s ", Cores.YELLOW_BOLD_BRIGHT,Cores.RESET);
         String cod = scanner.nextLine();
-        System.out.printf("%sSenha:%s ", Cores.YELLOW_BOLD_BRIGHT,Cores.RESET);
+        System.out.printf("     %sSenha:%s ", Cores.YELLOW_BOLD_BRIGHT,Cores.RESET);
         String sen = scanner.nextLine();
 
         for (User usuario : usuarios) {
@@ -97,6 +99,9 @@ public class SistemaAgendamento {
     //#############################################
 
     //########## MÉTODO PARA VALIDAR DOCUMENTOS NUMÉRICOS ##########
+    /*
+
+    */
     public static String validaDocNum(String doc, List<? extends Registros> registrados) {
         Scanner sc = new Scanner(System.in);
         boolean docValido = false;
@@ -194,6 +199,43 @@ public class SistemaAgendamento {
         }
 
     //#########################################################
+
+    //########## MÉTODO PARA VISUALIZAR MÉDICOS ###########
+   /* for (Medico medico : Medico.cadastrados) {
+        System.out.println(medico.toString());
+    }*/
+    public static void consultarMedico(){
+        for (Medico medico : Medico.cadastrados) {
+            Medico.especialidades.add(medico.getEspecialidade());
+        }
+
+
+        for (String especialidade : Medico.especialidades) {
+
+            int cont = 0;
+            ArrayList<Medico> m = new ArrayList<>();
+
+            for (Medico medico : Medico.cadastrados) {
+                if (medico.getEspecialidade().equals(especialidade)) {
+                    m.add(medico);
+                    cont += 1;
+                }
+
+            }
+
+            if (cont > 0) {
+                System.out.println(Cores.YELLOW_BOLD_BRIGHT+"Especialidade: " +Cores.RESET+ especialidade +Cores.YELLOW_BOLD_BRIGHT + "\nNº de médicos: " +Cores.RESET+ cont + "\n");
+                for (Medico medico : m) {
+                    System.out.println("Nome: " + medico.nome + "\nCPF: " + medico.cpf + "\nCRM/AL: " + medico.getCrm() +"\nSalario: R$ " + medico.getSalario() + "\n");
+                }
+            }
+
+        }
+    }
+
+
+
+    //#####################################################
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         SistemaAgendamento agendamento = new SistemaAgendamento();
@@ -289,12 +331,25 @@ public class SistemaAgendamento {
                                     break;
 
                                 case 4:
-                                    System.out.println("Consultar médicos da clínica");
+                                    //System.out.println("Consultar médicos da clínica");
+                                    if (Medico.cadastrados.isEmpty()) {
+                                        System.out.println(Cores.RED_BOLD_BRIGHT+"Não há médicos cadastrados no sistema."+Cores.RESET);
+                                        break;
+                                    }
+                                    consultarMedico();
 
-                                    break;
+                                break;
 
                                 case 5:
-                                    System.out.println("Consultar pacientes cadastrados");
+                                    if (Paciente.cadastrados.isEmpty()) {
+                                        System.out.println(Cores.RED_BOLD_BRIGHT+"Não há pacientes cadastrados no sistema."+Cores.RESET);
+                                        break;
+                                    }
+                                    System.out.println(Cores.YELLOW_BOLD_BRIGHT+"\nLista de Pacientes:\n"+Cores.RESET);
+                                    for (Paciente paciente : Paciente.cadastrados){
+                                        paciente.consultar();
+                                    }
+
                                     break;
 
                                 case 6:

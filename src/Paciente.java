@@ -5,19 +5,17 @@ public class Paciente extends Pessoa{
     public static List<Paciente> cadastrados = new ArrayList<>();
     public static List<? extends Registros> Atendimentos = new ArrayList<>();
 
-    private String SUS;
+    private final String SUS;
 
     public Paciente(String nome, String cpf, String SUS) {
         super(nome,cpf);
         this.SUS = SUS;
     }
 
-    @Override
     public void consultar() {
-        //Fazer método consultar pacientes cadastrados
+                  System.out.println("\nNome: " +getNome() + "\nCPF: " + getCpf() + "\nNº do SUS: " + getSUS()+"\n");
+        }
 
-
-    }
 
     @Override
     public String toString() {
