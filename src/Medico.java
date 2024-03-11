@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDateTime;
+
 
 public class Medico extends Pessoa{
     private final String crm;
@@ -7,7 +9,7 @@ public class Medico extends Pessoa{
     private final String especialidade;
 
 
-    public static List<? extends Registros> Atendimentos = new ArrayList<>();
+    List<LocalDateTime> agendamentos;
     public static List<Medico> cadastrados = new ArrayList<>();
     public static ArrayList<String> especialidades = new ArrayList<>();
 
@@ -16,6 +18,7 @@ public class Medico extends Pessoa{
         this.crm = crm;
         this.salario = salario;
         this.especialidade = especialidade;
+        this.agendamentos = new ArrayList<>();
     }
 
 
@@ -48,7 +51,9 @@ public class Medico extends Pessoa{
         // Ter opções 1. Todas as especialidades
         //            2. Filtrar por especialidades
 
-
+    public List<LocalDateTime> getAgendamentos() {
+        return this.agendamentos;
+        }
 
     @Override
     public String toString() {
@@ -59,6 +64,5 @@ public class Medico extends Pessoa{
                 "Salário: " + salario + '\n' +
                 "Especialidade: " + especialidade + '\n';
                 }
-
 
     }

@@ -1,23 +1,25 @@
 import java.time.LocalDateTime;
 
 public class Consulta implements Registros{
-    private Paciente paciente;
-    private Medico medico;
+    private String paciente;
+    private String medico;
     private LocalDateTime dataHora;
     private String especialidade;
 
-    public Consulta(Paciente paciente, Medico medico, LocalDateTime dataHora, String especialidade) {
+    public Consulta(String paciente, String medico, LocalDateTime dataHora, String especialidade) {
         this.paciente = paciente;
         this.medico = medico;
         this.dataHora = dataHora;
         this.especialidade = especialidade;
     }
 
-    public Paciente getPaciente() {
+
+
+    public String getPaciente() {
         return paciente;
     }
 
-    public Medico getMedico() {
+    public String getMedico() {
         return medico;
     }
 

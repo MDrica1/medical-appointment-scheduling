@@ -1,12 +1,12 @@
 //import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Formattable;
-import java.util.List;
-import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class SistemaAgendamento {
 
-    private static final List<User> usuarios = new ArrayList<>(); //guardar usuários cadastrados
+    private static List<User> usuarios = new ArrayList<>(); //guardar usuários cadastrados
+    private static final List<Consulta> consultas = new ArrayList<>(); // consultas agendadas
     private static String logado = null; //testar login
 
         //########## MÉTODO AGENDAR CONSULTA  ##########
@@ -18,12 +18,89 @@ public class SistemaAgendamento {
      (Dentro do horário comercial e que não haja choque de horários com outros atendimentos).
      3. Encontrado este dia e horário, marcar na agenda a consulta.
      */
+        public static void agendarConsulta() {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println(Cores.YELLOW_BOLD_BRIGHT+"    Digite a especialidade médica desejada:"+Cores.RESET);
+            String especialidade = scanner.nextLine();
+            System.out.println(Cores.YELLOW_BOLD_BRIGHT+"    Nome do paciente:"+Cores.RESET);
+            String paciente = scanner.nextLine();
 
-    public static void agendarConsulta(){
+            // Encontrar médicos com a especialidade desejada
+            List<Medico> medicosDisponiveis = new ArrayList<>();
+            for (Medico medico : Medico.cadastrados) {
+                if (medico.getEspecialidade().equalsIgnoreCase(especialidade)) {
+                    medicosDisponiveis.add(medico);
+                }
+            }
 
-    }
+            if (medicosDisponiveis.isEmpty()) {
+                System.out.println(Cores.RED_BOLD_BRIGHT+"Nenhum médico com a especialidade '" + especialidade + "' foi encontrado."+Cores.RESET);
+                return;
+            }
+
+            // Mostrar médicos disponíveis e permitir ao usuário escolher um médico
+            System.out.println(Cores.YELLOW_BOLD_BRIGHT+"Médicos disponíveis para a especialidade '" + especialidade + "':"+Cores.RESET);
+            for (int i = 0; i < medicosDisponiveis.size(); i++) {
+                Medico medico = medicosDisponiveis.get(i);
+                System.out.println((i + 1) + ". " +Cores.YELLOW_BOLD_BRIGHT+ medico.getNome()+Cores.RESET);
+            }
+            System.out.println(Cores.YELLOW_BOLD_BRIGHT+"Selecione o médico digitando o número correspondente:"+Cores.RESET);
+
+            int escolha = scanner.nextInt();
+            if (escolha < 1 || escolha > medicosDisponiveis.size()) {
+                System.out.println(Cores.RED_BOLD_BRIGHT+"Escolha inválida."+Cores.RESET);
+                return;
+            }
+
+            // Escolher o médico selecionado
+            Medico medicoSelecionado = medicosDisponiveis.get(escolha - 1);
+
+            // Solicitar ao usuário o horário desejado para a consulta
+            scanner.nextLine();
+            System.out.println(Cores.YELLOW_BOLD_BRIGHT+"Digite o horário desejado para a consulta (formato: yyyy-MM-dd HH:mm):"+Cores.RESET);
+            String horarioDesejadoStr = scanner.nextLine();
+            LocalDateTime horarioDesejado = LocalDateTime.parse(horarioDesejadoStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+
+            // Verificar se o horário está disponível
+            if (medicoSelecionado.getAgendamentos().contains(horarioDesejado)) {
+                System.out.println(Cores.RED_BOLD_BRIGHT+"O horário desejado já está agendado."+Cores.RESET);
+                return;
+            }
+
+            // Agendar a consulta
+            medicoSelecionado.getAgendamentos().add(horarioDesejado);
+            Consulta consulta = new Consulta(paciente,medicoSelecionado.getNome(),horarioDesejado,especialidade);
+            consultas.add(consulta);
+            System.out.println(Cores.GREEN_BOLD_BRIGHT+"Consulta agendada com sucesso para o Sr(a). "+paciente+" com Dr(a). " + medicoSelecionado.getNome() +" no horário: " + horarioDesejado +Cores.RESET);
+        }
+
 
     //#################################################
+
+    //######### MÉTODO PARA VISUALIZAR CONSULTAS AGENDADAS
+    public static void visualizaConsulta(){
+        Scanner scanner = new Scanner(System.in);
+        //System.out.println(Cores.YELLOW_BOLD_BRIGHT+"Médicos disponíveis para a especialidad '" + especialidade + "':"+Cores.RESET);
+        System.out.println(Cores.YELLOW_BOLD_BRIGHT+"Selecione o médico digitando o número correspondente:"+Cores.RESET);
+        for (int i = 0; i < Medico.cadastrados.size(); i++) {
+            Medico medico = Medico.cadastrados.get(i);
+            System.out.println((i + 1) + ". " + medico.getNome());
+        }
+        int escolha = scanner.nextInt();
+        if (escolha < 1 || escolha > Medico.cadastrados.size()) {
+            System.out.println(Cores.RED_BOLD_BRIGHT+"Escolha inválida."+Cores.RESET);
+            return;
+        }
+
+        Medico medicoSelecionado = Medico.cadastrados.get(escolha - 1);
+        for (Consulta consulta : consultas){
+            if (consulta.getMedico().equals(medicoSelecionado.nome)){
+                System.out.println(Cores.YELLOW_BOLD_BRIGHT+"\nPaciente: "+ Cores.RESET+consulta.getPaciente()+Cores.YELLOW_BOLD_BRIGHT+"\nMédico: Dr(a)."+Cores.RESET+consulta.getMedico() + Cores.YELLOW_BOLD_BRIGHT+"\nData/Horário: " +
+                        Cores.RESET+ consulta.getDataHora() +Cores.YELLOW_BOLD_BRIGHT+"\nEspecialidade: "+Cores.RESET+consulta.getEspecialidade());
+            }
+        }
+
+    }
 
         //########## MÉTODO CADASTRAR USUÁRIO ##########
     public static void adicionarUsuario() {
@@ -205,12 +282,13 @@ public class SistemaAgendamento {
         System.out.println(medico.toString());
     }*/
     public static void consultarMedico(){
+        Set<String> especialidades = new HashSet<>();
         for (Medico medico : Medico.cadastrados) {
-            Medico.especialidades.add(medico.getEspecialidade());
+            especialidades.add(medico.getEspecialidade());
         }
 
 
-        for (String especialidade : Medico.especialidades) {
+        for (String especialidade : especialidades) {
 
             int cont = 0;
             ArrayList<Medico> m = new ArrayList<>();
@@ -284,9 +362,9 @@ public class SistemaAgendamento {
                                     1 - %sCADASTRAR médicos%s
                                     2 - %sCADASTRAR pacientes%s
                                     3 - %sAGENDAR atendimentos%s
-                                    4 - %sCONSULTAR médicos%s \s
-                                    5 - %sCONSULTAR pacientes%s
-                                    6 - %sCONSULTAR atendimentos agendados%s
+                                    4 - %sVISUALIZAR médicos%s \s
+                                    5 - %sVISUALIZAR pacientes%s
+                                    6 - %sVISUALIZAR atendimentos agendados%s
                                     7 - %sLOGOUT%s
                                     """.formatted(Cores.YELLOW_BOLD_BRIGHT, Cores.RESET, Cores.YELLOW_BOLD_BRIGHT, Cores.RESET, Cores.YELLOW_BOLD_BRIGHT, Cores.RESET, Cores.YELLOW_BOLD_BRIGHT, Cores.RESET, Cores.YELLOW_BOLD_BRIGHT, Cores.RESET, Cores.YELLOW_BOLD_BRIGHT, Cores.RESET, Cores.YELLOW_BOLD_BRIGHT, Cores.RESET, Cores.YELLOW_BOLD_BRIGHT, Cores.RESET);
 
@@ -325,8 +403,8 @@ public class SistemaAgendamento {
                                     }
                                     break;
                                 case 3:
-                                    System.out.println("Método de agendar consultas");
-                                    //agendarConsulta();
+                                    //System.out.println("Método de agendar consultas");
+                                    agendarConsulta();
 
                                     break;
 
@@ -353,7 +431,8 @@ public class SistemaAgendamento {
                                     break;
 
                                 case 6:
-                                    System.out.println("Método de consultar consultas marcadas");
+                                    //System.out.println("Método de consultar consultas marcadas");
+                                    visualizaConsulta();
                                     break;
 
                                 case 7:
