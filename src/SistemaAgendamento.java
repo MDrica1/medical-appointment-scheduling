@@ -97,6 +97,9 @@ public class SistemaAgendamento {
             if (consulta.getMedico().equals(medicoSelecionado.nome)){
                 System.out.println(Cores.YELLOW_BOLD_BRIGHT+"\nPaciente: "+ Cores.RESET+consulta.getPaciente()+Cores.YELLOW_BOLD_BRIGHT+"\nMédico: Dr(a)."+Cores.RESET+consulta.getMedico() + Cores.YELLOW_BOLD_BRIGHT+"\nData/Horário: " +
                         Cores.RESET+ consulta.getDataHora() +Cores.YELLOW_BOLD_BRIGHT+"\nEspecialidade: "+Cores.RESET+consulta.getEspecialidade());
+            } else{
+                System.out.println(Cores.RED_BOLD_BRIGHT+"Não há consultas agendadas para este médico."+Cores.RESET);
+                continue;
             }
         }
 
@@ -144,8 +147,8 @@ public class SistemaAgendamento {
 
             User u1 = new User(nome, ncpf, senha);
             usuarios.add(u1);
-            System.out.printf("%sUsuário cadastrado com sucesso!%s%n", Cores.GREEN_BOLD_BRIGHT,Cores.RESET);
-            System.out.println("%s\nSeu login no sistema é: %s".formatted(Cores.YELLOW_BOLD_BRIGHT,Cores.RESET) + Cores.GREEN_BOLD_BRIGHT + u1.getCodigo()+Cores.RESET
+            System.out.printf("\n      >>> " + Cores.GREEN_BOLD_BRIGHT + "%sUsuário cadastrado com sucesso!" + Cores.RESET + " <<<%s%n", Cores.GREEN_BOLD_BRIGHT,Cores.RESET);
+            System.out.println("%s\n      Seu login no sistema é: %s".formatted(Cores.YELLOW_BOLD_BRIGHT,Cores.RESET) + Cores.GREEN_BOLD_BRIGHT + u1.getCodigo()+Cores.RESET
                     /*Cores.YELLOW_BOLD_BRIGHT+"\nUse-o para fazer login"+Cores.RESET*/);
 
         }
@@ -166,7 +169,7 @@ public class SistemaAgendamento {
 
         for (User usuario : usuarios) {
             if (usuario.getCodigo().equals(cod) && usuario.getSenha().equals(sen)) {
-                System.out.println(Cores.GREEN_BOLD_BRIGHT+"\nBem-vindo(a), "+usuario.getNome()+"!"+Cores.RESET);
+                System.out.println(Cores.GREEN_BOLD_BRIGHT+"\n     Bem-vindo(a), "+usuario.getNome()+"!"+Cores.RESET);
                 //encontrado = true;
                 logado = usuario.getNome();
                 // break;
@@ -250,7 +253,7 @@ public class SistemaAgendamento {
 
                 Paciente paciente = new Paciente(nomePaciente, nCPF,nSUS);
                 Paciente.cadastrados.add(paciente);
-                System.out.println(Cores.GREEN_BOLD_BRIGHT+"    >>>>Paciente "+ nomePaciente +" cadastrado(a) com sucesso<<<<\n"+Cores.RESET);
+                System.out.println(Cores.GREEN_BOLD_BRIGHT+"\n     >>>>Paciente "+ nomePaciente +" cadastrado(a) com sucesso<<<<\n"+Cores.RESET);
 
 
             } else if (pessoa == 1) {
@@ -269,7 +272,7 @@ public class SistemaAgendamento {
 
                 Medico medico = new Medico(nomeMedico, nCPF, nCRM, salario, especialidade);
                 Medico.cadastrados.add(medico);
-                System.out.println(Cores.GREEN_BOLD_BRIGHT + "     >>>>Dr(a). "+nomeMedico+" cadastrado(a) com sucesso<<<<\n" + Cores.RESET);
+                System.out.println(Cores.GREEN_BOLD_BRIGHT + "\n     >>>>Dr(a). "+nomeMedico+" cadastrado(a) com sucesso<<<<\n" + Cores.RESET);
 
             }
             //SistemaAgendamento.visualizarConsultas();
@@ -436,7 +439,7 @@ public class SistemaAgendamento {
                                     break;
 
                                 case 7:
-                                    System.out.println(Cores.GREEN_BOLD_BRIGHT + "\nBom descanço, " + logado + "!\nAté amanhã! :)\n" + Cores.RESET);
+                                    System.out.println(Cores.GREEN_BOLD_BRIGHT + "\nBom descanso, " + logado + "!\nAté amanhã! :)\n" + Cores.RESET);
                                     mensagemErro = false;
                                     break;
                                 default:
