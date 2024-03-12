@@ -20,10 +20,25 @@ public class SistemaAgendamento {
      */
         public static void agendarConsulta() {
             Scanner scanner = new Scanner(System.in);
+
             System.out.println(Cores.YELLOW_BOLD_BRIGHT+"    Digite a especialidade médica desejada:"+Cores.RESET);
             String especialidade = scanner.nextLine();
-            System.out.println(Cores.YELLOW_BOLD_BRIGHT+"    Nome do paciente:"+Cores.RESET);
+            Boolean p = false;
+            String nomeP = null;
+            System.out.println(Cores.YELLOW_BOLD_BRIGHT + "    CPF do paciente:" + Cores.RESET);
             String paciente = scanner.nextLine();
+                
+            for (Paciente pac : Paciente.cadastrados) {
+                if (pac.getCpf().equals(paciente)) {
+                    p = true;
+                    nomeP = pac.getNome();
+                    }
+                }
+            if (!p){
+                System.out.println(Cores.RED_BOLD_BRIGHT+"Paciente não encontrado. \nCadastre-o ou tente novamente usando um CPF cadastrado"+Cores.RESET);
+                return;
+            }
+
 
             // Encontrar médicos com a especialidade desejada
             List<Medico> medicosDisponiveis = new ArrayList<>();
@@ -71,7 +86,7 @@ public class SistemaAgendamento {
             medicoSelecionado.getAgendamentos().add(horarioDesejado);
             Consulta consulta = new Consulta(paciente,medicoSelecionado.getNome(),horarioDesejado,especialidade);
             consultas.add(consulta);
-            System.out.println(Cores.GREEN_BOLD_BRIGHT+"Consulta agendada com sucesso para Sr(a). "+paciente+" com Dr(a). " + medicoSelecionado.getNome() +" no horário: " + horarioDesejado +Cores.RESET);
+            System.out.println(Cores.GREEN_BOLD_BRIGHT+"Consulta agendada com sucesso para Sr(a). "+nomeP+" com Dr(a). " + medicoSelecionado.getNome() +" no horário: " + horarioDesejado +Cores.RESET);
         }
 
 
@@ -99,7 +114,7 @@ public class SistemaAgendamento {
         for (Consulta consulta : consultas) {
             if (consulta.getMedico().equals(medicoSelecionado.getNome())) {
                 consultaEncontrada = true;
-                System.out.println(Cores.YELLOW_BOLD_BRIGHT + "\nPaciente: " + Cores.RESET + consulta.getPaciente() + Cores.YELLOW_BOLD_BRIGHT + "\nMédico: Dr(a)." + Cores.RESET + consulta.getMedico() + Cores.YELLOW_BOLD_BRIGHT + "\nData/Horário: " + Cores.RESET + consulta.getDataHora() + Cores.YELLOW_BOLD_BRIGHT + "\nEspecialidade: " + Cores.RESET + consulta.getEspecialidade());
+                System.out.println(Cores.YELLOW_BOLD_BRIGHT + "\nPaciente: " + Cores.RESET + consulta.getPaciente() + Cores.YELLOW_BOLD_BRIGHT + "\nMédico: "+ Cores.RESET +"Dr(a)." + consulta.getMedico() + Cores.YELLOW_BOLD_BRIGHT + "\nData/Horário: " + Cores.RESET + consulta.getDataHora() + Cores.YELLOW_BOLD_BRIGHT + "\nEspecialidade: " + Cores.RESET + consulta.getEspecialidade());
             }
         }
 
