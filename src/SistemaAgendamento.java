@@ -57,13 +57,13 @@ public class SistemaAgendamento {
 
             // Solicitar ao usuário o horário desejado para a consulta
             scanner.nextLine();
-            System.out.println(Cores.YELLOW_BOLD_BRIGHT+"Digite o horário desejado para a consulta (formato: yyyy-MM-dd HH:mm):"+Cores.RESET);
+            System.out.println(Cores.YELLOW_BOLD_BRIGHT+"Digite a data e horário desejado para a consulta (formato: yyyy-MM-dd HH:mm):"+Cores.RESET);
             String horarioDesejadoStr = scanner.nextLine();
             LocalDateTime horarioDesejado = LocalDateTime.parse(horarioDesejadoStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
             // Verificar se o horário está disponível
             if (medicoSelecionado.getAgendamentos().contains(horarioDesejado)) {
-                System.out.println(Cores.RED_BOLD_BRIGHT+"O horário desejado já está agendado."+Cores.RESET);
+                System.out.println(Cores.RED_BOLD_BRIGHT+"O horário desejado não está disponível."+Cores.RESET);
                 return;
             }
 
@@ -71,7 +71,7 @@ public class SistemaAgendamento {
             medicoSelecionado.getAgendamentos().add(horarioDesejado);
             Consulta consulta = new Consulta(paciente,medicoSelecionado.getNome(),horarioDesejado,especialidade);
             consultas.add(consulta);
-            System.out.println(Cores.GREEN_BOLD_BRIGHT+"Consulta agendada com sucesso para o Sr(a). "+paciente+" com Dr(a). " + medicoSelecionado.getNome() +" no horário: " + horarioDesejado +Cores.RESET);
+            System.out.println(Cores.GREEN_BOLD_BRIGHT+"Consulta agendada com sucesso para Sr(a). "+paciente+" com Dr(a). " + medicoSelecionado.getNome() +" no horário: " + horarioDesejado +Cores.RESET);
         }
 
 
@@ -80,27 +80,31 @@ public class SistemaAgendamento {
     //######### MÉTODO PARA VISUALIZAR CONSULTAS AGENDADAS
     public static void visualizaConsulta(){
         Scanner scanner = new Scanner(System.in);
-        //System.out.println(Cores.YELLOW_BOLD_BRIGHT+"Médicos disponíveis para a especialidad '" + especialidade + "':"+Cores.RESET);
-        System.out.println(Cores.YELLOW_BOLD_BRIGHT+"Selecione o médico digitando o número correspondente:"+Cores.RESET);
+
+        System.out.println(Cores.YELLOW_BOLD_BRIGHT + "Selecione o médico digitando o número correspondente:" + Cores.RESET);
         for (int i = 0; i < Medico.cadastrados.size(); i++) {
             Medico medico = Medico.cadastrados.get(i);
             System.out.println((i + 1) + ". " + medico.getNome());
         }
+
         int escolha = scanner.nextInt();
         if (escolha < 1 || escolha > Medico.cadastrados.size()) {
-            System.out.println(Cores.RED_BOLD_BRIGHT+"Escolha inválida."+Cores.RESET);
+            System.out.println(Cores.RED_BOLD_BRIGHT + "Escolha inválida." + Cores.RESET);
             return;
         }
 
         Medico medicoSelecionado = Medico.cadastrados.get(escolha - 1);
-        for (Consulta consulta : consultas){
-            if (consulta.getMedico().equals(medicoSelecionado.nome)){
-                System.out.println(Cores.YELLOW_BOLD_BRIGHT+"\nPaciente: "+ Cores.RESET+consulta.getPaciente()+Cores.YELLOW_BOLD_BRIGHT+"\nMédico: Dr(a)."+Cores.RESET+consulta.getMedico() + Cores.YELLOW_BOLD_BRIGHT+"\nData/Horário: " +
-                        Cores.RESET+ consulta.getDataHora() +Cores.YELLOW_BOLD_BRIGHT+"\nEspecialidade: "+Cores.RESET+consulta.getEspecialidade());
-            } else{
-                System.out.println(Cores.RED_BOLD_BRIGHT+"Não há consultas agendadas para este médico."+Cores.RESET);
-                continue;
+        boolean consultaEncontrada = false;
+
+        for (Consulta consulta : consultas) {
+            if (consulta.getMedico().equals(medicoSelecionado.getNome())) {
+                consultaEncontrada = true;
+                System.out.println(Cores.YELLOW_BOLD_BRIGHT + "\nPaciente: " + Cores.RESET + consulta.getPaciente() + Cores.YELLOW_BOLD_BRIGHT + "\nMédico: Dr(a)." + Cores.RESET + consulta.getMedico() + Cores.YELLOW_BOLD_BRIGHT + "\nData/Horário: " + Cores.RESET + consulta.getDataHora() + Cores.YELLOW_BOLD_BRIGHT + "\nEspecialidade: " + Cores.RESET + consulta.getEspecialidade());
             }
+        }
+
+        if (!consultaEncontrada) {
+            System.out.println(Cores.RED_BOLD_BRIGHT + "Não há consultas agendadas para este médico." + Cores.RESET);
         }
 
     }
