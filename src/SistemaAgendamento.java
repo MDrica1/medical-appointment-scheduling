@@ -84,7 +84,7 @@ public class SistemaAgendamento {
 
             // Agendar a consulta
             medicoSelecionado.getAgendamentos().add(horarioDesejado);
-            Consulta consulta = new Consulta(paciente,medicoSelecionado.getNome(),horarioDesejado,especialidade);
+            Consulta consulta = new Consulta(nomeP,medicoSelecionado.getNome(),horarioDesejado,especialidade);
             consultas.add(consulta);
             System.out.println(Cores.GREEN_BOLD_BRIGHT+"Consulta agendada com sucesso para Sr(a). "+nomeP+" com Dr(a). " + medicoSelecionado.getNome() +" no horário: " + horarioDesejado +Cores.RESET);
         }
